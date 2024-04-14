@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.drones.utilities.Constants.DRONE_FLEET_LIMIT;
@@ -32,14 +31,17 @@ public class DronesServiceImpl implements DronesService {
 
     private final MedicationsRepository medicationsRepository;
 
+
     public DronesServiceImpl(DronesRepository dronesRepository,MedicationsRepository medicationsRepository ,ModelMapper modelMapper) {
         this.dronesRepository = dronesRepository;
         this.medicationsRepository=medicationsRepository;
         this.modelMapper = modelMapper;
     }
 
+
+
     @Override
-    public DronesDto registerDrone(DronesDto dronesDto) {
+    public Drones registerDrone(DronesDto dronesDto) {
 
         if(!dronesRepository.findById(dronesDto.getSerialNumber()).isEmpty()){
             throw new ExistedResourceException("serial number "+dronesDto.getSerialNumber()+" already exists");
@@ -60,7 +62,7 @@ public class DronesServiceImpl implements DronesService {
         log.info("save new drone ..");
 
         dronesRepository.save(drone);
-        return mapToDto(drone);
+        return drone;
     }
 
     @Override
@@ -82,6 +84,9 @@ public class DronesServiceImpl implements DronesService {
         log.info("check Loaded Medications By Drone ..");
 
         Drones drones=dronesRepository.findById(droneSerialNum).orElseThrow(()->new ResourceNotFoundException(droneSerialNum));
+        if(medicationsRepository.findByDrones(drones).isEmpty()){
+            throw new ResourceNotFoundException("this drone is not loaded");
+        }
         return medicationsRepository.findByDrones(drones);
     }
 
@@ -92,11 +97,11 @@ public class DronesServiceImpl implements DronesService {
         return availableDrones.stream().filter(drone ->drone.getBatteryCapacity()>=25 && drone.getWeight()<WEIGHT_LIMIT).map(this::mapToDto).collect(Collectors.toList());
     }
 
-    @Override
-    public Optional<Drones> getDroneBySerialNumber(String serialNumber) {
-        log.info("get drones by serial number = "+serialNumber);
-        return dronesRepository.findById(serialNumber);
-    }
+//    @Override
+//    public Optional<Drones> getDroneBySerialNumber(String serialNumber) {
+//        log.info("get drones by serial number = "+serialNumber);
+//        return dronesRepository.findById(serialNumber);
+//    }
 
     @Override
     @Transactional
