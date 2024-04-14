@@ -1,7 +1,6 @@
 package com.drones.services.implementation;
 
 import com.drones.dto.DronesDto;
-import com.drones.dto.MedicationDto;
 import com.drones.entities.Drones;
 import com.drones.entities.Medications;
 import com.drones.enums.DroneState;
@@ -9,11 +8,9 @@ import com.drones.exceptions.*;
 import com.drones.repositories.DronesRepository;
 import com.drones.repositories.MedicationsRepository;
 import com.drones.services.DronesService;
-import com.drones.services.MedicationsService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +20,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.drones.utilities.Constants.*;
+import static com.drones.utilities.Constants.DRONE_FLEET_LIMIT;
+import static com.drones.utilities.Constants.WEIGHT_LIMIT;
 
 
 @Service
@@ -43,6 +41,9 @@ public class DronesServiceImpl implements DronesService {
     @Override
     public DronesDto registerDrone(DronesDto dronesDto) {
 
+        if(!dronesRepository.findById(dronesDto.getSerialNumber()).isEmpty()){
+            throw new ExistedResourceException("serial number "+dronesDto.getSerialNumber()+" already exists");
+        }
         log.info("starting register new drone ..");
         if (dronesRepository.count() == DRONE_FLEET_LIMIT) {
             throw new DroneFeetSizeExceeded("Drone Fleet Size Exceeded");

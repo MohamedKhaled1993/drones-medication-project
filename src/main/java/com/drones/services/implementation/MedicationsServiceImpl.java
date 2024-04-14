@@ -1,16 +1,13 @@
 package com.drones.services.implementation;
 
-import com.drones.dto.DronesDto;
 import com.drones.dto.MedicationDto;
-import com.drones.entities.Drones;
 import com.drones.entities.Medications;
+import com.drones.exceptions.ExistedResourceException;
 import com.drones.repositories.MedicationsRepository;
 import com.drones.services.MedicationsService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -36,6 +33,10 @@ public class MedicationsServiceImpl implements MedicationsService {
 
         log.info("starting register new medication ");
 
+        if(!medicationsRepository.findById(medicationDto.getCode()).isEmpty()){
+            throw new ExistedResourceException("Medication code "+medicationDto.getCode()+" already exists");
+
+        }
         Medications medications=medicationsRepository.save(mapToEntity(medicationDto));
         return mapToDto(medications);
     }
