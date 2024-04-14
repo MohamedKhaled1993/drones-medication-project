@@ -1,0 +1,100 @@
+{
+	"info": {
+		"_postman_id": "3258a106-c0c3-440d-8b7a-81773877b679",
+		"name": "Drones",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "17188801"
+	},
+	"item": [
+		{
+			"name": "Add Drone",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n    \"serialNumber\":\"serial5\",\r\n    \"model\":\"LIGHTWEIGHT\",\r\n    \"weight\":0,\r\n    \"batteryCapacity\":54,\r\n    \"state\":\"IDLE\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/drone/add"
+			},
+			"response": []
+		},
+		{
+			"name": "Add Medication",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"code\":\"MED4\",\r\n    \"weight\":90,\r\n    \"name\":\"Med4NAme\",\r\n    \"image\":\"med4.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/medication/"
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllDrones",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/api/drone/"
+			},
+			"response": []
+		},
+		{
+			"name": "GetAvailableDrones",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/api/drone/available"
+			},
+			"response": []
+		},
+		{
+			"name": "CheckBatteryBySerial",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/api/drone/checkBatteryBySerial/serial2"
+			},
+			"response": []
+		},
+		{
+			"name": "LoadDrone",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "\r\n  [\r\n    \"MED1\",\r\n    \"MED2\",\r\n    \"MED3\"\r\n ]\r\n    \r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "localhost:8080/api/drone/loadDrone/serial1"
+			},
+			"response": []
+		},
+		{
+			"name": "medicationsByDrone",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "localhost:8080/api/drone/medicationsByDrone/serial1"
+			},
+			"response": []
+		}
+	]
+}
