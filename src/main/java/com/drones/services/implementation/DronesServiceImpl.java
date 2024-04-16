@@ -68,6 +68,7 @@ public class DronesServiceImpl implements DronesService {
     @Override
     public List<DronesDto> getAllDrones() {
         List<Drones> dronesList= dronesRepository.findAll();
+        log.info("getALLDrone works successfully");
         return dronesList.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
